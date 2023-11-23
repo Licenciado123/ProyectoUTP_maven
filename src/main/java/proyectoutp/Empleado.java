@@ -12,18 +12,16 @@ public class Empleado {
     int id;
     String nombre;
     String telefono;
-    String estado;
     String user;
     String contraseña;
     
     public Empleado() {    
     }
     
-    public Empleado(int id, String nombre, String telefono, String estado, String user, String contraseña) {
+    public Empleado(int id, String nombre, String telefono, String user, String contraseña) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
-        this.estado = estado;
         this.user = user;
         this.contraseña = contraseña;
     }
@@ -39,16 +37,32 @@ public class Empleado {
     public String getTelefono() {
         return telefono;
     }
-
-    public String getEstado() {
-        return estado;
-    }
-
+        
     public String getUser() {
         return user;
     }
 
     public String getContraseña() {
         return contraseña;
-    }  
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
+    }
 }

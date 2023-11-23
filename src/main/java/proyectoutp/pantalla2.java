@@ -23,7 +23,7 @@ public class pantalla2 extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(this);
 
-        SetImageLabel(jLabel1, "src/imagenes/logo.png"); 
+        SetImageLabel(jLabel1, "src/main/java/imagenes/logo.png"); 
         // Esta instanciado la imagen
     }
 

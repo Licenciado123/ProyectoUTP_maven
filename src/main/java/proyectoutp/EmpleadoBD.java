@@ -18,18 +18,25 @@ public class EmpleadoBD {
     CConexion conexion = new CConexion();
     Connection con;
     
-    public Empleado ValidarEmpleado(String id_empleado, String em_user){
-        Empleado emp = new Empleado();
-        String sql = "select * from empleado where id_empleado=? and em_user=?";
+    public Empleado ValidarEmpleado(String em_contraseña, String em_user){
+        Empleado em = new Empleado();
+        String sql = "select * from empleado where em_contraseña=? and em_user=?";
         try {
             con = conexion.establecerConexion();
             ps = con.prepareStatement(sql);
-            ps.setString(1, id_empleado);
+            ps.setString(1, em_contraseña);
             ps.setString(2, em_user);
             rs = ps.executeQuery();
-        } catch (Exception e) {
+            while (rs.next()) {
+                em.setId(rs.getInt(1));
+                em.setNombre(rs.getString(2));
+                em.setTelefono(rs.getString(3));
+                em.setUser(rs.getString(4));
+                em.setContraseña(rs.getString(5));
+            }    
+        } catch (Exception e) { 
             
         }
-        return emp;
+        return em;
     }
 }
