@@ -10,7 +10,7 @@ package proyectoutp;
  */
 public class Main {
     public static void main(String[] args) {
-        CConexion objetoconexion = new CConexion();
-        objetoconexion.establecerConexion();
+        CConexion oc = new CConexion();
+        oc.establecerConexion();
     }
 }

@@ -15,7 +15,7 @@ public class CConexion {
     
     String cadena = "jdbc:sqlserver://"+ip+":"+puerto+"/"+bd;
     
-    public Connection establecerConexion(){
+    public Connection establecerConexion() {
         try {
             String cadena = "jdbc:sqlserver://localhost:"+puerto+";"+"databaseName="+bd+";integratedSecurity=false; trustServerCertificate=true";
             conectar = DriverManager.getConnection(cadena,usuario,contrasenia);
