@@ -33,11 +33,10 @@ public class EmpleadoBD {
                 em.setTelefono(rs.getString(3));
                 em.setUser(rs.getString(4));
                 em.setContraseña(rs.getString(5));   
-            }          
+            }
         } catch (Exception e) { 
-            
-        }
-        return em;
-        
+                
+        }   
+        return em;        
     }
 }
