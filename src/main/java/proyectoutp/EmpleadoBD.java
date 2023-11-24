@@ -20,7 +20,7 @@ public class EmpleadoBD {
     
     public Empleado ValidarEmpleado(String em_contraseña, String em_user){
         Empleado em = new Empleado();
-        String sql = "select * from empleado where em_contraseña=? and em_user=?";
+        String sql = "SELECT * FROM empleado WHERE em_contraseña=? and em_user=?";
         try {
             con = conexion.establecerConexion();
             ps = con.prepareStatement(sql);
@@ -32,11 +32,12 @@ public class EmpleadoBD {
                 em.setNombre(rs.getString(2));
                 em.setTelefono(rs.getString(3));
                 em.setUser(rs.getString(4));
-                em.setContraseña(rs.getString(5));
-            }    
+                em.setContraseña(rs.getString(5));   
+            }          
         } catch (Exception e) { 
             
         }
         return em;
+        
     }
 }

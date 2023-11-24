@@ -199,9 +199,9 @@ public class pantalla1 extends javax.swing.JFrame {
             jTextField2.requestFocus();
         } else {
             em = ebd.ValidarEmpleado(contraseña, user);
-            if (em.getUser() !=null && em.getContraseña() !=null) {
+            if (em.getUser()!=null && em.getContraseña()!=null) {
                 pantalla2 p2 = new pantalla2();
-                //esta es la pantalla2instanciada
+                //esta es la pantalla2 instanciada
                 p2.setVisible(true);
                 dispose();
             } else {

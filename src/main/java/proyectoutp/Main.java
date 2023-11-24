@@ -10,7 +10,13 @@ package proyectoutp;
  */
 public class Main {
     public static void main(String[] args) {
-        CConexion oc = new CConexion();
-        oc.establecerConexion();
+        
+        EmpleadoBD ebd = new EmpleadoBD();
+        Empleado em = new Empleado();
+        String contraseña = "123";
+        String user = "emp01";
+        em = ebd.ValidarEmpleado(contraseña, user);
+        System.out.println(em.getUser());
+        System.out.println(em.getContraseña());
     }
 }
