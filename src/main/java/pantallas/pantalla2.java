@@ -520,7 +520,7 @@ public class pantalla2 extends javax.swing.JFrame {
     public void actualizarStock() {
         for (int i = 0; i < modelo.getRowCount(); i++) {
             Producto p2 = new Producto();
-            nombre =jTable1.getValueAt(i, 1).toString();
+            nombre =jTable1.getValueAt(i, 2).toString();
             cantidad = Integer.parseInt(jTable1.getValueAt(i, 3).toString());
             p2 = pbd.registrarNombre(nombre);
             int newstock = p2.getStock() - cantidad;
