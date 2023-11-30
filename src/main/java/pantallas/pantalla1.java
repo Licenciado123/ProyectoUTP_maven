@@ -206,15 +206,16 @@ public class pantalla1 extends javax.swing.JFrame {
         } else {
             em = ebd.ValidarEmpleado(contraseña, user);
             if (em.getUser()!=null && em.getContraseña()!=null) {
-                if (em.getCargo().equals("admin")){
-                    pantalla3 p3 = new pantalla3();
+                if (em.getCargo().equals("gerente")) {
+                    pantalla3 p3 = new pantalla3(em.getNombre());
                     p3.setVisible(true);
-                }
-                pantalla2 p2 = new pantalla2(em.getNombre(), em.getId());
-                //esta es la pantalla2 instanciada
-                p2.setVisible(true);
-                dispose();
-                
+                    dispose();
+                } else {
+                    pantalla2 p2 = new pantalla2(em.getNombre(), em.getId());
+                    //esta es la pantalla2 instanciada
+                    p2.setVisible(true);
+                    dispose();
+                }          
             } else {
                 JOptionPane.showMessageDialog(this, "Debe ingresar datos validos");
                 jTextField2.requestFocus();

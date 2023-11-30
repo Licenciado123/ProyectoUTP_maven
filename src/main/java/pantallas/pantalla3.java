@@ -9,6 +9,11 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import modulos.Venta;
 import modulos.VentaBD;
+import java.sql.*;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import modulos.CConexion;
 
 /**
  *
@@ -19,28 +24,28 @@ public class pantalla3 extends javax.swing.JFrame {
     /**
      * Creates new form pantallla3
      */
+    CConexion conexion = new CConexion();
     VentaBD vbd = new VentaBD();
     String gerente;
-    String dia;
-    double vd;
-    
+ 
     public pantalla3(String gerente) {
         initComponents();
+        Calendar fecha = new GregorianCalendar();
+        String f = fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH);
         this.gerente = gerente;
-        this.vd = Double.parseDouble(vbd.ventaDia(generarFecha(dia)));
+        double vd = vbd.ventaDia(f);
         jTextField7.setText(gerente);
         jTextField5.setText(String.valueOf(vd));
     }
     
     public pantalla3() {
         initComponents();
-    }
-
-    public String generarFecha(String f) {
         Calendar fecha = new GregorianCalendar();
-        f = fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH);
-        return f;
+        String f = fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH);
+        double vd = vbd.ventaDia(f);
+        jTextField5.setText(String.valueOf(vd));
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -70,7 +75,7 @@ public class pantalla3 extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(153, 204, 255));
 
-        jToggleButton5.setText("CANCELAR");
+        jToggleButton5.setText("CARGAR");
         jToggleButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButton5ActionPerformed(evt);
@@ -166,7 +171,15 @@ public class pantalla3 extends javax.swing.JFrame {
             new String [] {
                 "EMP", "CLI", "MONTO", "FECHA"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -175,19 +188,16 @@ public class pantalla3 extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jToggleButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(12, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,7 +224,7 @@ public class pantalla3 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 159, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -222,6 +232,27 @@ public class pantalla3 extends javax.swing.JFrame {
 
     private void jToggleButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton5ActionPerformed
         // TODO add your handling code here:
+        try {
+            DefaultTableModel modelo = new DefaultTableModel();
+            jTable1.setModel(modelo);
+            Connection con = conexion.establecerConexion();
+            PreparedStatement ps = con.prepareCall("select * from venta");
+            ResultSet rs = ps.executeQuery();
+            modelo.addColumn("EMP");
+            modelo.addColumn("CLI");
+            modelo.addColumn("MONTO");
+            modelo.addColumn("FECHA");
+            while(rs.next()){              
+                Object[] ob = new Object[4];
+                ob[0] = rs.getInt(2);
+                ob[1] = rs.getString(4);
+                ob[2] = rs.getDouble(6);
+                ob[3] = rs.getString(7);       
+                modelo.addRow(ob);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,e.toString() );
+        }
     }//GEN-LAST:event_jToggleButton5ActionPerformed
 
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed

@@ -21,8 +21,6 @@ public class VentaBD {
     
     int r = 0;
     
-    
-    
     public String NroOrden() {
         String orden = "";
         String sql = "SELECT max(orden_venta) from VENTA";
@@ -38,16 +36,16 @@ public class VentaBD {
         return orden;
     }
     
-    public String ventaDia(String fecha) {
-        String vd = "";
-        String sql = "SELECT suma(monto_venta) from VENTA where fecha_venta=?";
+    public double ventaDia(String fecha) {
+        double vd = 0;
+        String sql = "SELECT sum(monto_venta) from VENTA where fecha_venta=?";
         try {
             con = conexion.establecerConexion();
             ps = con.prepareStatement(sql);
             ps.setString(1, fecha);
             rs = ps.executeQuery();
             while(rs.next()) {
-                vd = rs.getString(1);
+                vd = Double.parseDouble(rs.getString(1));
             }
         } catch (Exception e) {        
         } 
