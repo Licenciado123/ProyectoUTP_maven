@@ -5,10 +5,13 @@
  */
 package pantallas;
 
+import java.awt.Image;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import modulos.VentaBD;
 import java.sql.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -44,6 +47,7 @@ public class pantalla3 extends javax.swing.JFrame {
         String f = fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH);
         double vd = vbd.ventaDia(f);
         jTextField5.setText(String.valueOf(vd));
+        SetImageLabel(jLabel1, "src/main/java/imagenes/logo.png"); 
     }
     
     /**
@@ -82,6 +86,7 @@ public class pantalla3 extends javax.swing.JFrame {
             }
         });
 
+        jTextField5.setEditable(false);
         jTextField5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField5ActionPerformed(evt);
@@ -89,7 +94,7 @@ public class pantalla3 extends javax.swing.JFrame {
         });
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel11.setText("INGRESOS:");
+        jLabel11.setText("INGRESOS DIARIOS:");
 
         jPanel2.setBackground(new java.awt.Color(153, 204, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -105,6 +110,11 @@ public class pantalla3 extends javax.swing.JFrame {
         jLabel7.setText("FECHA");
 
         jToggleButton2.setText("BUSCAR");
+        jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton2ActionPerformed(evt);
+            }
+        });
 
         jTextField7.setEditable(false);
 
@@ -259,6 +269,32 @@ public class pantalla3 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField5ActionPerformed
 
+    private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
+        // TODO add your handling code here:
+        try {
+            DefaultTableModel modelo = new DefaultTableModel();
+            jTable1.setModel(modelo);
+            Connection con = conexion.establecerConexion();
+            PreparedStatement ps = con.prepareCall("select * from venta where fecha_venta=?");
+            ps.setString(1, jTextField1.getText());
+            ResultSet rs = ps.executeQuery();
+            modelo.addColumn("EMP");
+            modelo.addColumn("CLI");
+            modelo.addColumn("MONTO");
+            modelo.addColumn("FECHA");
+            while(rs.next()){              
+                Object[] ob = new Object[4];
+                ob[0] = rs.getInt(2);
+                ob[1] = rs.getString(4);
+                ob[2] = rs.getDouble(6);
+                ob[3] = rs.getString(7);       
+                modelo.addRow(ob);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,"Fecha ingresada no valida" );
+        }
+    }//GEN-LAST:event_jToggleButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -294,6 +330,14 @@ public class pantalla3 extends javax.swing.JFrame {
             }
         });
     }
+        private void SetImageLabel(JLabel labelName,String root){
+        ImageIcon image=new ImageIcon(root);
+        Icon icon=new ImageIcon(
+                image.getImage().getScaledInstance(labelName.getWidth() , labelName.getHeight(),Image.SCALE_DEFAULT )
+        );
+        labelName.setIcon(icon);
+        this.repaint();
+    };    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -313,7 +357,4 @@ public class pantalla3 extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton5;
     // End of variables declaration//GEN-END:variables
 
-    private void SetImageLabel(JLabel jLabel1, String srcmainjavaimageneslogopng) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }
