@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +20,19 @@ public class ProductoBD {
     CConexion conexion = new CConexion();
     Connection con;
     Producto prod = new Producto(); 
+    
+    public int actualizarStock(int stock, String nombre) {
+        String sql = "update producto set stock_prod=? where nom_prod=?";
+        try {
+            con = conexion.establecerConexion();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, stock);
+            ps.setString(2, nombre);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+        return r;
+    }
     
     public Producto registrarNombre(String nombre) {
         Producto p = new Producto();

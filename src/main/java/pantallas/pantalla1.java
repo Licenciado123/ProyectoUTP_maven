@@ -206,7 +206,11 @@ public class pantalla1 extends javax.swing.JFrame {
         } else {
             em = ebd.ValidarEmpleado(contraseña, user);
             if (em.getUser()!=null && em.getContraseña()!=null) {
-                pantalla2 p2 = new pantalla2(em.getNombre());
+                if (em.getCargo().equals("admin")){
+                    pantalla3 p3 = new pantalla3();
+                    p3.setVisible(true);
+                }
+                pantalla2 p2 = new pantalla2(em.getNombre(), em.getId());
                 //esta es la pantalla2 instanciada
                 p2.setVisible(true);
                 dispose();

@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modulos.DetalleVenta;
 import modulos.Producto;
 import modulos.ProductoBD;
 import modulos.Venta;
@@ -28,10 +29,13 @@ public class pantalla2 extends javax.swing.JFrame {
 
     VentaBD vbd = new VentaBD();
     Venta v = new Venta();
+    DetalleVenta dv = new DetalleVenta();
     Producto p1 = new Producto();
     ProductoBD pbd = new ProductoBD();
     DefaultTableModel modelo = new DefaultTableModel();
     String empleado;
+    int id_empleado;
+    String nombre;
     int id;
     int cantidad;
     double precio;
@@ -39,26 +43,43 @@ public class pantalla2 extends javax.swing.JFrame {
     /**
      * Creates new form pantalla2
      */
-    public pantalla2(String empleado) {
+    public pantalla2(String empleado, int id_empleado) {
         initComponents();
+        generarOrden();
+        generarFecha();
         this.empleado = empleado;
+        this.id_empleado = id_empleado;
         this.setLocationRelativeTo(this);
-        Calendar fecha = new GregorianCalendar();
         jTextField4.setText(empleado);
-        jTextField11.setText(fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH));
         SetImageLabel(jLabel1, "src/main/java/imagenes/logo.png"); 
         // Esta instanciado la imagen
     }
 
     public pantalla2() {
         initComponents();
+        generarOrden();
+        generarFecha();
         this.setLocationRelativeTo(this);
-        Calendar fecha = new GregorianCalendar();
-        jTextField11.setText(fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH));
         SetImageLabel(jLabel1, "src/main/java/imagenes/logo.png"); 
         // Esta instanciado la imagen
     }
+    
+    public void generarFecha() {
+        Calendar fecha = new GregorianCalendar();
+        jTextField11.setText(fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH));
+    }
 
+    public void generarOrden() {
+        String serie = vbd.NroOrden();
+        if (serie == null){
+            jTextField1.setText("0000001");
+        } else {
+            int incremento = Integer.parseInt(serie);
+            incremento = incremento + 1;
+            jTextField1.setText("000000"+incremento);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -201,7 +222,7 @@ public class pantalla2 extends javax.swing.JFrame {
 
             },
             new String [] {
-                "NRO", "COD", "PRODUCTO", "CANTIDAD", "UNIDAD", "PRECIO UNI (S/)", "SUBTOTAL (S/)", "IGV (S/)", "TOTAL (S/)"
+                "NRO", "COD", "PROD", "CANT", "UNID", "PRECIO UNI (S/)", "SUBTOTAL (S/)", "IGV (S/)", "TOTAL (S/)"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -406,11 +427,6 @@ public class pantalla2 extends javax.swing.JFrame {
        // double monto = 0;
         //String fecha = jTextField11.getText();        
     //}
-    
-    public void registrarDetalleVenta() {
-        
-    }
-    
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
         // TODO add your handling code here:
         agregarProducto();
@@ -423,7 +439,7 @@ public class pantalla2 extends javax.swing.JFrame {
             item = item + 1;
             id = p1.getId();
             String unidad = p1.getUnidad();
-            String nombre = jComboBox1.getSelectedItem().toString();
+            nombre = jComboBox1.getSelectedItem().toString();
             precio = p1.getPrecio();
             int stock = Integer.parseInt(jTextField7.getText());
             cantidad = Integer.parseInt(jSpinner1.getValue().toString());
@@ -492,8 +508,78 @@ public class pantalla2 extends javax.swing.JFrame {
 
     private void jToggleButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton4ActionPerformed
         // TODO add your handling code here:
+        if (jTextField5.equals("")||jTextField2.equals("")||jTextField10.equals("")) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar datos");
+        } else { 
+            guardarVenta();
+            guardarDetalle();
+            actualizarStock();   
+            JOptionPane.showMessageDialog(this, "Venta realizada con exito");
+            nuevo();
+            generarOrden();
+        }
     }//GEN-LAST:event_jToggleButton4ActionPerformed
 
+    public void nuevo() {
+        jTextField2.setText("");
+        jTextField10.setText("");
+        jTextField8.setText("");
+        jTextField7.setText("");
+        jTextField5.setText("");
+        jSpinner1.setValue(0);
+    }    
+    
+    public void limpiar() {
+        limpiar();
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            modelo.removeRow(i);
+            i = i - 1;
+        }
+    }
+    
+    public void actualizarStock() {
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            Producto p2 = new Producto();
+            nombre =jTable1.getValueAt(i, 1).toString();
+            cantidad = Integer.parseInt(jTable1.getValueAt(i, 3).toString());
+            p2 = pbd.registrarNombre(nombre);
+            int newstock = p2.getStock() - cantidad;
+            pbd.actualizarStock(newstock, nombre);
+        }
+    }
+    
+    public void guardarVenta() {
+        int id_emp = id_empleado;
+        String dni_cli = jTextField2.getText();
+        String nom_cli = jTextField10.getText();
+        String orden = jTextField1.getText();
+        double monto = tpagar;
+        String fecha = jTextField11.getText(); 
+        
+        v.setId_emp(id_emp);
+        v.setDni_cli(dni_cli);
+        v.setNom_cli(nom_cli);
+        v.setOrden(orden);
+        v.setMonto(monto);
+        v.setFecha(fecha);
+        vbd.registrarVentas(v);
+    }
+    
+    public void guardarDetalle() {
+        String idv = vbd.idVenta();
+        int idve = Integer.parseInt(idv);
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            int idprod = Integer.parseInt(jTable1.getValueAt(i, 1).toString());
+            int cant = Integer.parseInt(jTable1.getValueAt(i, 3).toString());
+            double precio = Double.parseDouble(jTable1.getValueAt(i, 5).toString());
+            dv.setId_venta(idve);
+            dv.setId_prod(idprod);
+            dv.setCantidad(cant);
+            dv.setPrecioVenta(precio);
+            vbd.registrarDetalleVenta(dv);
+        }
+    }  
+    
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed

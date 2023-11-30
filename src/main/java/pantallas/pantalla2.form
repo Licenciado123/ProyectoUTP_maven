@@ -398,9 +398,9 @@
                   <Table columnCount="9" rowCount="0">
                     <Column editable="true" title="NRO" type="java.lang.Object"/>
                     <Column editable="true" title="COD" type="java.lang.Object"/>
-                    <Column editable="true" title="PRODUCTO" type="java.lang.Object"/>
-                    <Column editable="true" title="CANTIDAD" type="java.lang.Object"/>
-                    <Column editable="true" title="UNIDAD" type="java.lang.Object"/>
+                    <Column editable="true" title="PROD" type="java.lang.Object"/>
+                    <Column editable="true" title="CANT" type="java.lang.Object"/>
+                    <Column editable="true" title="UNID" type="java.lang.Object"/>
                     <Column editable="true" title="PRECIO UNI (S/)" type="java.lang.Object"/>
                     <Column editable="true" title="SUBTOTAL (S/)" type="java.lang.Object"/>
                     <Column editable="true" title="IGV (S/)" type="java.lang.Object"/>

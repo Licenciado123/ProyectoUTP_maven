@@ -14,16 +14,18 @@ public class Empleado {
     String telefono;
     String user;
     String contraseña;
+    String cargo;
     
     public Empleado() {    
     }
     
-    public Empleado(int id, String nombre, String telefono, String user, String contraseña) {
+    public Empleado(int id, String nombre, String telefono, String user, String contraseña, String cargo) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
         this.user = user;
         this.contraseña = contraseña;
+        this.cargo = cargo;
     }
     
     public int getId() {
@@ -64,5 +66,13 @@ public class Empleado {
 
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 }

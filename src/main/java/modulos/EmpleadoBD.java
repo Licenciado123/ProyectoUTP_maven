@@ -32,7 +32,8 @@ public class EmpleadoBD {
                 em.setNombre(rs.getString(2));
                 em.setTelefono(rs.getString(3));
                 em.setUser(rs.getString(4));
-                em.setContraseña(rs.getString(5));   
+                em.setContraseña(rs.getString(5));  
+                em.setCargo(rs.getString(6));
             }
         } catch (Exception e) { 
                 
