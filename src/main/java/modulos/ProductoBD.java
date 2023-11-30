@@ -22,13 +22,13 @@ public class ProductoBD {
     Connection con;
     Producto prod = new Producto(); 
     
-    public Producto registrarId(int id) {
+    public Producto registrarNombre(String nombre) {
         Producto p = new Producto();
-        String sql = "select * from producto where id_prod=?";
+        String sql = "select * from producto where nom_prod=?";
         try {
             con = conexion.establecerConexion();
             ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setString(1, nombre);
             rs = ps.executeQuery();
             while(rs.next()) {
                 p.setId(rs.getInt(1));
