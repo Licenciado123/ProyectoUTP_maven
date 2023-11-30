@@ -7,10 +7,9 @@ package pantallas;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import modulos.Venta;
 import modulos.VentaBD;
 import java.sql.*;
-import java.util.ArrayList;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modulos.CConexion;
@@ -36,6 +35,7 @@ public class pantalla3 extends javax.swing.JFrame {
         double vd = vbd.ventaDia(f);
         jTextField7.setText(gerente);
         jTextField5.setText(String.valueOf(vd));
+        SetImageLabel(jLabel1, "src/main/java/imagenes/logo.png"); 
     }
     
     public pantalla3() {
@@ -312,4 +312,8 @@ public class pantalla3 extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToggleButton jToggleButton5;
     // End of variables declaration//GEN-END:variables
+
+    private void SetImageLabel(JLabel jLabel1, String srcmainjavaimageneslogopng) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
