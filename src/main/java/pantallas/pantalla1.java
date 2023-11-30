@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package proyectoutp;
+package pantallas;
 
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import modulos.Empleado;
+import modulos.EmpleadoBD;
 
 /**
  *
@@ -19,6 +21,7 @@ public class pantalla1 extends javax.swing.JFrame {
 
     EmpleadoBD ebd = new EmpleadoBD();
     Empleado em = new Empleado();
+    
     //instancia con empleadoDAO y entidadesempleado
     public pantalla1() {
         initComponents();
@@ -193,6 +196,7 @@ public class pantalla1 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         validar();
     }
+    
     public void validar() {
         String contraseña = jPasswordField1.getText();
         String user = jTextField2.getText();
@@ -202,10 +206,11 @@ public class pantalla1 extends javax.swing.JFrame {
         } else {
             em = ebd.ValidarEmpleado(contraseña, user);
             if (em.getUser()!=null && em.getContraseña()!=null) {
-                pantalla2 p2 = new pantalla2();
+                pantalla2 p2 = new pantalla2(em.getNombre());
                 //esta es la pantalla2 instanciada
                 p2.setVisible(true);
                 dispose();
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Debe ingresar datos validos");
                 jTextField2.requestFocus();

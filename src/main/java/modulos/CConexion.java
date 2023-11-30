@@ -1,4 +1,4 @@
-package proyectoutp;
+package modulos;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
