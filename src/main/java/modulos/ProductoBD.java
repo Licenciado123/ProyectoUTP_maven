@@ -34,7 +34,6 @@ public class ProductoBD {
     }
     
     public Producto registrarNombre(String nombre) {
-        Producto p = new Producto();
         String sql = "select * from producto where nom_prod=?";
         try {
             con = conexion.establecerConexion();
@@ -42,14 +41,14 @@ public class ProductoBD {
             ps.setString(1, nombre);
             rs = ps.executeQuery();
             while(rs.next()) {
-                p.setId(rs.getInt(1));
-                p.setNombre(rs.getString(2));
-                p.setPrecio(rs.getDouble(3));
-                p.setUnidad(rs.getString(4));
-                p.setStock(rs.getInt(5));
+                prod.setId(rs.getInt(1));
+                prod.setNombre(rs.getString(2));
+                prod.setPrecio(rs.getDouble(3));
+                prod.setUnidad(rs.getString(4));
+                prod.setStock(rs.getInt(5));
             }
         } catch (Exception e) {
-        } return p;
+        } return prod;
     }
 }
 

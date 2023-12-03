@@ -10,8 +10,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import modulos.VentaBD;
 import java.sql.*;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -31,15 +29,16 @@ public class pantalla3 extends javax.swing.JFrame {
      * Creates new form pantallla3
      */
     CConexion conexion = new CConexion();
+    Connection con = conexion.establecerConexion();
     VentaBD vbd = new VentaBD();
     EmpleadoBD ebd = new EmpleadoBD();
-    String gerente;
- 
+    Empleado em = new Empleado();
+    DefaultTableModel modelo = new DefaultTableModel();
+    
     public pantalla3(String gerente) {
         initComponents();
         Calendar fecha = new GregorianCalendar();
         String f = fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH);
-        this.gerente = gerente;
         double vd = vbd.ventaDia(f);
         jTextField7.setText(gerente);
         jTextField5.setText(String.valueOf(vd));
@@ -49,9 +48,6 @@ public class pantalla3 extends javax.swing.JFrame {
     public pantalla3() {
         initComponents();
         Calendar fecha = new GregorianCalendar();
-        LocalTime hora1 = LocalTime.now();
-        DateTimeFormatter hora2 = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String hora = hora1.format(hora2);
         String f = fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH);
         double vd = vbd.ventaDia(f);
         jTextField5.setText(String.valueOf(vd));
@@ -251,11 +247,8 @@ public class pantalla3 extends javax.swing.JFrame {
     private void jToggleButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton5ActionPerformed
         // TODO add your handling code here:
         try {
-            DefaultTableModel modelo = new DefaultTableModel();
             jTable1.setModel(modelo);
-            Empleado em = new Empleado();
             int id = 1;
-            Connection con = conexion.establecerConexion();
             PreparedStatement ps = con.prepareCall("select * from venta");
             ResultSet rs = ps.executeQuery();
             modelo.addColumn("EMP");
@@ -283,11 +276,8 @@ public class pantalla3 extends javax.swing.JFrame {
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
         // TODO add your handling code here:
         try {
-            DefaultTableModel modelo = new DefaultTableModel();
             jTable1.setModel(modelo);
-            Empleado em = new Empleado();
             int id = 1;
-            Connection con = conexion.establecerConexion();
             PreparedStatement ps = con.prepareCall("select * from venta where fecha_venta=?");
             ps.setString(1, jTextField1.getText());
             ResultSet rs = ps.executeQuery();

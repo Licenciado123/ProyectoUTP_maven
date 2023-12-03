@@ -35,7 +35,6 @@ public class pantalla2 extends javax.swing.JFrame {
     Producto p = new Producto();
     ProductoBD pbd = new ProductoBD();
     DefaultTableModel modelo = new DefaultTableModel();
-    String empleado;
     int id_empleado;
     String nombre;
     int id;
@@ -49,7 +48,6 @@ public class pantalla2 extends javax.swing.JFrame {
         initComponents();
         generarOrden();
         generarFecha();
-        this.empleado = empleado;
         this.id_empleado = id_empleado;
         this.setLocationRelativeTo(this);
         jTextField4.setText(empleado);
@@ -410,15 +408,6 @@ public class pantalla2 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    //public void registrarVentas() {
-      //  int idv = 0;
-      //  int idc = 0;
-      //  String dni_cli = jTextField2.getText();
-      //  String nom_cli = jTextField10.getText();
-       // String orden = jTextField1.getText();
-       // double monto = 0;
-        //String fecha = jTextField11.getText();        
-    //}
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
         // TODO add your handling code here:
         agregarProducto();
@@ -426,15 +415,16 @@ public class pantalla2 extends javax.swing.JFrame {
 
     public void agregarProducto() {
         try {
-            int item = 0;
+            ingresarProducto();
+            int nro = 0;
             modelo = (DefaultTableModel)jTable1.getModel();
-            item = item + 1;
-            id = p.getId();
+            nro = nro + 1;
             String unidad = p.getUnidad();
-            nombre = jComboBox1.getSelectedItem().toString();
             precio = p.getPrecio();
-            int stock = Integer.parseInt(jTextField7.getText());
+            id = p.getId();
+            nombre = jComboBox1.getSelectedItem().toString();
             cantidad = Integer.parseInt(jSpinner1.getValue().toString());
+            int stock = Integer.parseInt(jTextField7.getText());
             double total = cantidad*precio;
             double subtotal = (total*100)/118;
             BigDecimal st = new BigDecimal(subtotal).setScale(2, RoundingMode.HALF_UP);
@@ -442,7 +432,7 @@ public class pantalla2 extends javax.swing.JFrame {
             BigDecimal ig = new BigDecimal(igv).setScale(2, RoundingMode.HALF_UP);        
             ArrayList lista = new ArrayList();
             if (stock > 0 && (stock > cantidad) && cantidad > 0) {
-                lista.add(item);
+                lista.add(nro);
                 lista.add(id);
                 lista.add(nombre);
                 lista.add(cantidad);
@@ -497,8 +487,8 @@ public class pantalla2 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Debe ingresar datos");
         } else { 
             guardarVenta();
-            //guardarDetalle();
-            //actualizarStock();   
+            guardarDetalle();
+            actualizarStock();   
             JOptionPane.showMessageDialog(this, "Venta realizada con exito");
             nuevo();
             generarOrden();
@@ -524,24 +514,22 @@ public class pantalla2 extends javax.swing.JFrame {
     
     public void actualizarStock() {
         for (int i = 0; i < modelo.getRowCount(); i++) {
-            Producto p1 = new Producto();
             nombre =jTable1.getValueAt(i, 2).toString();
             cantidad = Integer.parseInt(jTable1.getValueAt(i, 3).toString());
-            p1 = pbd.registrarNombre(nombre);
-            int newstock = p1.getStock() - cantidad;
+            p = pbd.registrarNombre(nombre);
+            int newstock = p.getStock() - cantidad;
             pbd.actualizarStock(newstock, nombre);
         }
     }
     
     public void guardarVenta() {
-        int id_emp = id_empleado;
         String dni_cli = jTextField10.getText();
         String nom_cli = jTextField9.getText();
         String orden = jTextField1.getText();
         double monto = tpagar;
         String fecha = jTextField11.getText(); 
         
-        v.setId_emp(id_emp);
+        v.setId_emp(id_empleado);
         v.setDni_cli(dni_cli);
         v.setNom_cli(nom_cli);
         v.setOrden(orden);
@@ -551,13 +539,12 @@ public class pantalla2 extends javax.swing.JFrame {
     }
     
     public void guardarDetalle() {
-        String idv = vbd.idVenta();
-        int idve = Integer.parseInt(idv);
+        int idv = vbd.idVenta();
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             int idprod = Integer.parseInt(jTable1.getValueAt(i, 1).toString());
             int cant = Integer.parseInt(jTable1.getValueAt(i, 3).toString());
-            double precio = Double.parseDouble(jTable1.getValueAt(i, 5).toString());
-            dv.setId_venta(idve);
+            precio = Double.parseDouble(jTable1.getValueAt(i, 5).toString());
+            dv.setId_venta(idv);
             dv.setId_prod(idprod);
             dv.setCantidad(cant);
             dv.setPrecioVenta(precio);
@@ -583,8 +570,8 @@ public class pantalla2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField5ActionPerformed
 
     public void ingresarProducto() {
-        String producto = jComboBox1.getSelectedItem().toString();
-        p = pbd.registrarNombre(producto);
+        nombre = jComboBox1.getSelectedItem().toString();
+        p = pbd.registrarNombre(nombre);
         jTextField8.setText("S/"+String.valueOf(p.getPrecio()));
         jTextField7.setText(Integer.toString(p.getStock()));
     }

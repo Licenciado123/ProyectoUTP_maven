@@ -14,12 +14,12 @@ import java.sql.ResultSet;
 public class EmpleadoBD {
     PreparedStatement ps;
     ResultSet rs;
+    Empleado em = new Empleado();
     
     CConexion conexion = new CConexion();
     Connection con;
     
     public Empleado ValidarEmpleado(String contra_emp, String user_emp){
-        Empleado em = new Empleado();
         String sql = "SELECT * FROM empleado WHERE contra_emp=? and user_emp=?";
         try {
             con = conexion.establecerConexion();
@@ -41,7 +41,6 @@ public class EmpleadoBD {
     }
     
         public Empleado ValidarEmpleado(int id_emp){
-        Empleado em = new Empleado();
         String sql = "SELECT * FROM empleado WHERE id_emp=?";
         try {
             con = conexion.establecerConexion();

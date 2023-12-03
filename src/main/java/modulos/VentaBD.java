@@ -52,15 +52,15 @@ public class VentaBD {
         return vd;
     }
     
-    public String idVenta() {
-        String idv = "";
+    public int idVenta() {
+        int idv = 0;
         String sql = "SELECT max(id_venta) from VENTA";
         try {
             con = conexion.establecerConexion();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while(rs.next()) {
-                idv = rs.getString(1);
+                idv = rs.getInt(1);
             }
         } catch (Exception e) {        
         } 
@@ -68,7 +68,6 @@ public class VentaBD {
     }
     
     public int registrarVentas(Venta v) {
-        Venta ventas = new Venta();
         String sql = "insert into venta(id_emp, dni_cli, nom_cli, orden_venta, monto_venta, fecha_venta) values(?,?,?,?,?,?)";
         try {
             con = conexion.establecerConexion();
