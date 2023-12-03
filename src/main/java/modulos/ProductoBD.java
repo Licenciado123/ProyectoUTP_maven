@@ -7,7 +7,6 @@ package modulos;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  *
@@ -49,8 +48,7 @@ public class ProductoBD {
                 p.setUnidad(rs.getString(4));
                 p.setStock(rs.getInt(5));
             }
-        } catch (SQLException e) {
-            System.out.println(e.toString());
+        } catch (Exception e) {
         } return p;
     }
 }

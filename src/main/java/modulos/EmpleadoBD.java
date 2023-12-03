@@ -35,8 +35,28 @@ public class EmpleadoBD {
                 em.setContraseña(rs.getString(5));  
                 em.setCargo(rs.getString(6));
             }
-        } catch (Exception e) { 
-                
+        } catch (Exception e) {        
+        }   
+        return em;        
+    }
+    
+        public Empleado ValidarEmpleado(int id_emp){
+        Empleado em = new Empleado();
+        String sql = "SELECT * FROM empleado WHERE id_emp=?";
+        try {
+            con = conexion.establecerConexion();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id_emp);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                em.setId(rs.getInt(1));
+                em.setNombre(rs.getString(2));
+                em.setTelefono(rs.getString(3));
+                em.setUser(rs.getString(4));
+                em.setContraseña(rs.getString(5));  
+                em.setCargo(rs.getString(6));
+            }
+        } catch (Exception e) {        
         }   
         return em;        
     }

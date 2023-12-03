@@ -10,12 +10,16 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import modulos.VentaBD;
 import java.sql.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modulos.CConexion;
+import modulos.Empleado;
+import modulos.EmpleadoBD;
 
 /**
  *
@@ -28,6 +32,7 @@ public class pantalla3 extends javax.swing.JFrame {
      */
     CConexion conexion = new CConexion();
     VentaBD vbd = new VentaBD();
+    EmpleadoBD ebd = new EmpleadoBD();
     String gerente;
  
     public pantalla3(String gerente) {
@@ -44,6 +49,9 @@ public class pantalla3 extends javax.swing.JFrame {
     public pantalla3() {
         initComponents();
         Calendar fecha = new GregorianCalendar();
+        LocalTime hora1 = LocalTime.now();
+        DateTimeFormatter hora2 = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String hora = hora1.format(hora2);
         String f = fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH);
         double vd = vbd.ventaDia(f);
         jTextField5.setText(String.valueOf(vd));
@@ -183,7 +191,7 @@ public class pantalla3 extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -245,6 +253,8 @@ public class pantalla3 extends javax.swing.JFrame {
         try {
             DefaultTableModel modelo = new DefaultTableModel();
             jTable1.setModel(modelo);
+            Empleado em = new Empleado();
+            int id = 1;
             Connection con = conexion.establecerConexion();
             PreparedStatement ps = con.prepareCall("select * from venta");
             ResultSet rs = ps.executeQuery();
@@ -252,16 +262,17 @@ public class pantalla3 extends javax.swing.JFrame {
             modelo.addColumn("CLI");
             modelo.addColumn("MONTO");
             modelo.addColumn("FECHA");
-            while(rs.next()){              
+            while(rs.next()){
+                em = ebd.ValidarEmpleado(id);
                 Object[] ob = new Object[4];
-                ob[0] = rs.getInt(2);
+                ob[0] = em.getNombre();
                 ob[1] = rs.getString(4);
                 ob[2] = rs.getDouble(6);
-                ob[3] = rs.getString(7);       
+                ob[3] = rs.getString(7);
+                id++;
                 modelo.addRow(ob);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,e.toString() );
         }
     }//GEN-LAST:event_jToggleButton5ActionPerformed
 
@@ -274,6 +285,8 @@ public class pantalla3 extends javax.swing.JFrame {
         try {
             DefaultTableModel modelo = new DefaultTableModel();
             jTable1.setModel(modelo);
+            Empleado em = new Empleado();
+            int id = 1;
             Connection con = conexion.establecerConexion();
             PreparedStatement ps = con.prepareCall("select * from venta where fecha_venta=?");
             ps.setString(1, jTextField1.getText());
@@ -282,13 +295,15 @@ public class pantalla3 extends javax.swing.JFrame {
             modelo.addColumn("CLI");
             modelo.addColumn("MONTO");
             modelo.addColumn("FECHA");
-            while(rs.next()){              
+            while(rs.next()){          
+                em = ebd.ValidarEmpleado(id);
                 Object[] ob = new Object[4];
                 ob[0] = rs.getInt(2);
                 ob[1] = rs.getString(4);
                 ob[2] = rs.getDouble(6);
                 ob[3] = rs.getString(7);       
                 modelo.addRow(ob);
+                id++;
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,"Fecha ingresada no valida" );

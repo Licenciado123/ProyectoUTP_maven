@@ -14,6 +14,8 @@ import java.util.GregorianCalendar;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modulos.DetalleVenta;
@@ -30,7 +32,7 @@ public class pantalla2 extends javax.swing.JFrame {
     VentaBD vbd = new VentaBD();
     Venta v = new Venta();
     DetalleVenta dv = new DetalleVenta();
-    Producto p1 = new Producto();
+    Producto p = new Producto();
     ProductoBD pbd = new ProductoBD();
     DefaultTableModel modelo = new DefaultTableModel();
     String empleado;
@@ -66,6 +68,9 @@ public class pantalla2 extends javax.swing.JFrame {
     
     public void generarFecha() {
         Calendar fecha = new GregorianCalendar();
+        LocalTime hora1 = LocalTime.now();
+        DateTimeFormatter hora2 = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String hora = hora1.format(hora2);
         jTextField11.setText(fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH));
     }
 
@@ -424,10 +429,10 @@ public class pantalla2 extends javax.swing.JFrame {
             int item = 0;
             modelo = (DefaultTableModel)jTable1.getModel();
             item = item + 1;
-            id = p1.getId();
-            String unidad = p1.getUnidad();
+            id = p.getId();
+            String unidad = p.getUnidad();
             nombre = jComboBox1.getSelectedItem().toString();
-            precio = p1.getPrecio();
+            precio = p.getPrecio();
             int stock = Integer.parseInt(jTextField7.getText());
             cantidad = Integer.parseInt(jSpinner1.getValue().toString());
             double total = cantidad*precio;
@@ -492,8 +497,8 @@ public class pantalla2 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Debe ingresar datos");
         } else { 
             guardarVenta();
-            guardarDetalle();
-            actualizarStock();   
+            //guardarDetalle();
+            //actualizarStock();   
             JOptionPane.showMessageDialog(this, "Venta realizada con exito");
             nuevo();
             generarOrden();
@@ -519,11 +524,11 @@ public class pantalla2 extends javax.swing.JFrame {
     
     public void actualizarStock() {
         for (int i = 0; i < modelo.getRowCount(); i++) {
-            Producto p2 = new Producto();
+            Producto p1 = new Producto();
             nombre =jTable1.getValueAt(i, 2).toString();
             cantidad = Integer.parseInt(jTable1.getValueAt(i, 3).toString());
-            p2 = pbd.registrarNombre(nombre);
-            int newstock = p2.getStock() - cantidad;
+            p1 = pbd.registrarNombre(nombre);
+            int newstock = p1.getStock() - cantidad;
             pbd.actualizarStock(newstock, nombre);
         }
     }
@@ -579,9 +584,9 @@ public class pantalla2 extends javax.swing.JFrame {
 
     public void ingresarProducto() {
         String producto = jComboBox1.getSelectedItem().toString();
-        p1 = pbd.registrarNombre(producto);
-        jTextField8.setText("S/"+String.valueOf(p1.getPrecio()));
-        jTextField7.setText(Integer.toString(p1.getStock()));
+        p = pbd.registrarNombre(producto);
+        jTextField8.setText("S/"+String.valueOf(p.getPrecio()));
+        jTextField7.setText(Integer.toString(p.getStock()));
     }
     /**
      * @param args the command line arguments
