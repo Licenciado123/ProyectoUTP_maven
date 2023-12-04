@@ -14,8 +14,6 @@ import java.util.GregorianCalendar;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modulos.DetalleVenta;
@@ -66,9 +64,6 @@ public class pantalla2 extends javax.swing.JFrame {
     
     public void generarFecha() {
         Calendar fecha = new GregorianCalendar();
-        LocalTime hora1 = LocalTime.now();
-        DateTimeFormatter hora2 = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String hora = hora1.format(hora2);
         jTextField11.setText(fecha.get(Calendar.YEAR) + "-" + (fecha.get(Calendar.MONTH)+1) + "-" + fecha.get(Calendar.DAY_OF_MONTH));
     }
 
